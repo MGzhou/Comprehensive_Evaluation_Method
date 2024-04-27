@@ -1,7 +1,13 @@
 
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''
+@File   : AHP.py
+@Time   : 2024/04/27 17:28:10
+@Desc   : AHP层次分析法
+'''
+
 import numpy as np
-
-
 class AHP:
     def __init__(self, judgment_matrix):
         """
@@ -11,7 +17,7 @@ class AHP:
         self.n = judgment_matrix.shape[0] # 记录矩阵大小
         self.max_val = None # 最大特征根
         self.max_vector = None # 特征向量
-        self.weight_vector = None # 权重（最终需要的结果）
+        self.W = None # 权重（最终需要的结果）
         self.CI = None
         self.CR = None
         # 初始化RI值,用于一致性检验 
@@ -39,9 +45,9 @@ class AHP:
         #添加最大特征值属性
         self.max_val = max_val
         #计算权重向量W
-        self.weight_vector = self.max_vector/sum(self.max_vector)
+        self.W = self.max_vector/sum(self.max_vector)
         #打印结果
-        return self.weight_vector
+        return self.W
     
     def test_consitst(self):
         """
@@ -70,7 +76,7 @@ class AHP:
         """
         @X: 数据样本，类型需要 np.ndarray
         """
-        return X @ self.weight_vector
+        return X @ self.W
 
 
 if __name__=="__main__":
@@ -92,8 +98,8 @@ if __name__=="__main__":
     print("判断矩阵的RI值为" +str(ahp1.RI))
     print("最大的特征值: "+str(ahp1.max_val))
     print("对应的特征向量为: "+str(ahp1.max_vector))
-    print("归一化后得到权重向量: "+str(ahp1.weight_vector))
-    print(f"权重相加：{sum(ahp1.weight_vector)}")
+    print("归一化后得到权重向量: "+str(ahp1.W))
+    print(f"权重相加：{sum(ahp1.W)}")
 
     # 预测
     X = [[90, 20, 50, 30]]
