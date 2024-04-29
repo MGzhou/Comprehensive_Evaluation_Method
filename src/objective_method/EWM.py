@@ -68,12 +68,14 @@ class EWM:
         return X, min_val, max_val
 
 
-    def min_max_scaler_neg(self, X):
+    def min_max_scaler_neg(self, X, min_val=None, max_val = None):
         """
         负向指标标准化
         """
-        min_val = np.min(X, axis=0)  # 获取每一列的最小值
-        max_val = np.max(X, axis=0)
+        if min_val is None:
+            min_val = np.min(X, axis=0)  # 获取每一列的最小值
+        if max_val is None:
+            max_val = np.max(X, axis=0)
         X = (max_val - X) / (max_val - min_val)
         return X, min_val, max_val
 
@@ -93,7 +95,7 @@ def test():
     ewm = EWM()
     ewm.fit(X, normal=True)
 
-    print(f"权重 = {ewm.W}")
+    print(f"权重 = {ewm.W}")  # [0.0631 0.05947 0.0554 0.0633 0.1908 0.2255 0.2053 0.1372]
 
     test_X = X
 
