@@ -19,7 +19,7 @@ class EWM:
         self.min_val_list = None
 
 
-    def fit(self, X, normal=False, limit_max_val_list=None, limit_min_val_list=None):
+    def fit(self, X):
         """
         模型计算权重
         @X: 训练数据样本, np.ndarray
@@ -27,16 +27,6 @@ class EWM:
         @max_val_list: 限定样本指标标准化时最大值
         @min_val_list: 限定样本指标标准化时最小值
         """
-        # 数据标准化
-        if normal:
-            if limit_max_val_list:
-                self.limit_max_val_list = limit_max_val_list
-                X = np.where(X > limit_max_val_list, limit_max_val_list, X)
-            if limit_min_val_list:
-                self.limit_min_val_list = limit_min_val_list
-                X = np.where(X < limit_min_val_list, limit_min_val_list, X)
-            # 默认都是正向指标
-            X, self.min_val_list, self.max_val_list = self.min_max_scaler_pos(X)
         [m, n] = X.shape  # m 个样本， n 个指标
         # 计算比重
         P = X / np.sum(X, axis=0)
@@ -93,7 +83,10 @@ def test():
     print(X[0])
 
     ewm = EWM()
-    ewm.fit(X, normal=True)
+    # 标准化
+    X, min_val, max_val = ewm.min_max_scaler_pos(X)
+
+    ewm.fit(X)
 
     print(f"权重 = {ewm.W}")  # [0.0631 0.05947 0.0554 0.0633 0.1908 0.2255 0.2053 0.1372]
 
